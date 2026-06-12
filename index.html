@@ -18,7 +18,12 @@
     const { createClient } = supabase
     const db = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-    async function testarConexao() {
+    async function iniciar() {
+      const { error: authError } = await db.auth.signInAnonymously()
+      if (authError) {
+        document.getElementById('status').textContent = 'Erro de auth: ' + authError.message
+        return
+      }
       const { data, error } = await db.from('albuns').select('id').limit(1)
       if (error) {
         document.getElementById('status').textContent = 'Erro: ' + error.message
@@ -27,7 +32,7 @@
       }
     }
 
-    testarConexao()
+    iniciar()
   </script>
 
 </body>
